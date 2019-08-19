@@ -254,12 +254,20 @@ object ListExercises {
     */
   def reverseList[A](xs: List[A]): List[A] = xs.foldLeft(List.empty[A])((result, now) => now :: result)
 
-  /**
+  /** r
     * Pack consecutive duplicates of list elements into sublists.
     * If a list contains repeated elements they should be placed in separate sublists.
     *
     * Given: val l1 = List("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e")
     * sublists(l1) == List(List("a", "a", "a", "a"), List("b"), List("c", "c"), List("a", "a"), List("d"), List("e", "e", "e", "e"))
     */
-  def sublists[A](xs: List[A]): List[List[A]] = xs.foldLeft(List.empty[List[A]])((acc: List[List[A]], now: A) => ???)
+  def sublists[A](xs: List[A]): List[List[A]] = xs.foldLeft(List.empty[List[A]])((result, now) => {
+    result match {
+      case head :: tail => {
+        if (head.contains(now)) (head :+ now) :: tail
+        else List(now) :: result
+      }
+      case Nil => List(List(now))
+    }
+  }).reverse
 }

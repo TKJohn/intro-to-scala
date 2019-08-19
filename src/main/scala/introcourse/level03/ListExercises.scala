@@ -221,7 +221,9 @@ object ListExercises {
     * Hint: Use `personWithIndex`, `filter` and `showPerson`.
     *
     */
-  def showEveryNthPerson(n: Int, persons: List[Person]): List[String] = ???
+  def showEveryNthPerson(n: Int, persons: List[Person]): List[String] = personWithIndex(persons)
+    .filter(pair => n <= 0 || pair._2 % n == 0)
+    .map(pair => showPerson(pair._1))
 
   private[level03] def showPerson(person: Person): String =
     person match {
@@ -259,5 +261,5 @@ object ListExercises {
     * Given: val l1 = List("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e")
     * sublists(l1) == List(List("a", "a", "a", "a"), List("b"), List("c", "c"), List("a", "a"), List("d"), List("e", "e", "e", "e"))
     */
-  def sublists[A](xs: List[A]): List[List[A]] = xs.foldLeft(List.empty[List[A]])(???)
+  def sublists[A](xs: List[A]): List[List[A]] = xs.foldLeft(List.empty[List[A]])((acc: List[List[A]], now: A) => ???)
 }

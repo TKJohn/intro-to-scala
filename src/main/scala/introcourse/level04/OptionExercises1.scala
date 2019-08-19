@@ -35,7 +35,7 @@ object OptionExercises1 {
     * scala> 5 / 2.toDouble
     * = 2.5
     **/
-  def safeMean(nums: List[Int]): Option[Double] = ???
+  def safeMean(nums: List[Int]): Option[Double] = if (nums.isEmpty) None else Some(nums.sum.toDouble / nums.length)
 
   /**
     * Safe constructors
@@ -58,7 +58,12 @@ object OptionExercises1 {
     *
     * Hint: Use pattern matching
     **/
-  def mkTrafficLight(str: String): Option[TrafficLight] = ???
+  def mkTrafficLight(str: String): Option[TrafficLight] = str match {
+    case "red" => Some(Red)
+    case "green" => Some(Green)
+    case "yellow" => Some(Yellow)
+    case _ => None
+  }
 
   /**
     * scala> mkTrafficLightThenShow("red")
@@ -79,12 +84,17 @@ object OptionExercises1 {
     *
     * ```
     * optSomething match {
-    *   case Some(a) => // do something with `a`
-    *   case None => // do something else
+    * case Some(a) => // do something with `a`
+    * case None => // do something else
     * }
     * ```
     */
-  def mkTrafficLightThenShow(str: String): String = ???
+  def mkTrafficLightThenShow(str: String): String = mkTrafficLight(str) match {
+    case Some(Red) => s"Traffic light is red"
+    case Some(Yellow) => s"Traffic light is yellow"
+    case Some(Green) => s"Traffic light is green"
+    case None => s"Traffic light `$str` is invalid"
+  }
 
   /**
     * scala> mkPerson("Bob", 20)
@@ -102,7 +112,7 @@ object OptionExercises1 {
     *
     * Hint: Don't forget every if needs an else!
     **/
-  def mkPerson(name: String, age: Int): Option[Person] = ???
+  def mkPerson(name: String, age: Int): Option[Person] = if (name.nonEmpty && age > 0) Some(Person(name, age)) else None
 
   /**
     * scala> mkPersonThenChangeName("Bob", 20, "John")
@@ -116,6 +126,14 @@ object OptionExercises1 {
     *
     * Hint: Use `mkPerson` and pattern matching
     **/
-  def mkPersonThenChangeName(oldName: String, age: Int, newName: String): Option[Person] = ???
+  def mkPersonThenChangeName(oldName: String, age: Int, newName: String): Option[Person] = {
+    val maybePerson: Option[Person] = mkPerson(oldName, age)
 
+    maybePerson match {
+      case Some(old) => mkPerson(newName, old.age)
+      case None => None
+    }
+  }
+
+  //    mkPerson(oldName, age).flatMap(old => mkPerson(newName, old.age))
 }

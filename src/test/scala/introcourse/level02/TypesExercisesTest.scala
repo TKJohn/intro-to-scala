@@ -123,7 +123,7 @@ class TypesExercisesTest extends FunSpec with TypeCheckedTripleEquals {
     }
 
     it("should show Flashing") {
-      val str = showTrafficLight(Flashing)
+      val str = showTrafficLight(Flashing(10))
 
       assert(str === "The traffic light is flashing")
     }

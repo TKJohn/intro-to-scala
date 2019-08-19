@@ -18,7 +18,7 @@ object IntroExercises {
     * scala> add(1, 2)
     * = 3
     **/
-  def add(x: Int, y: Int): Int = x + y
+  def add(x: Int, y: Int): Int = x.+(y)
 
 
   /**
@@ -26,7 +26,7 @@ object IntroExercises {
     * scala> addCurried(1)(2)
     * = 3
     **/
-  def addCurried(x: Int)(y: Int): Int = x + y
+  def addCurried(x: Int)(y: Int): Int = add(x, y)
 
 
   /**
@@ -35,7 +35,11 @@ object IntroExercises {
     * = 9
     *
     **/
-  def add5(x: Int): Int = addCurried(5)(x)
+  def add5(x: Int): Int = {
+    val f: Int => Int = addCurried(5)
+
+    f(x)
+  }
 
   /**
     * Parametric types
@@ -84,7 +88,9 @@ object IntroExercises {
   /**
     * How can we extract the first element of a pair?
     */
-  def fst(pair: (String, Int)): String = pair._1
+  def fst(pair: (String, Int)): String = pair match {
+    case (first, _) => first
+  }
 
   /**
     * How can we extract the second element of a pair?

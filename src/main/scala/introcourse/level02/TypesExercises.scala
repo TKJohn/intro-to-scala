@@ -139,10 +139,12 @@ object TypesExercises {
     * Implement the following showTrafficLightStr function to pass all your tests!
     */
   def showTrafficLightStr(trafficLight: String): String = {
-    if (trafficLight == "red" || trafficLight == "yellow" || trafficLight == "green" || trafficLight == "flashing")
-      s"The traffic light is $trafficLight"
-    else
-      s"The traffic light is invalid"
+    val lightStr = trafficLight match {
+      case "red" | "yellow" | "green" | "flashing" => trafficLight
+      case _ => "invalid"
+    }
+
+    s"The traffic light is $lightStr"
   }
 
 
@@ -190,7 +192,7 @@ object TypesExercises {
 
   case object Green extends TrafficLight
 
-  case object Flashing extends TrafficLight
+  case class Flashing(interval: Int) extends TrafficLight
 
   /**
     * scala> showTrafficLight(Red)
@@ -212,8 +214,7 @@ object TypesExercises {
       case Red => "red"
       case Yellow => "yellow"
       case Green => "green"
-      case Flashing => "flashing"
-      case _ => "invalid"
+      case Flashing(_) => "flashing"
     }
     s"The traffic light is $lightStr"
   }

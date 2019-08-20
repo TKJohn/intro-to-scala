@@ -115,7 +115,7 @@ object LogParser {
     * What if we get an empty line from the fileContent?
     */
   def parseLogFile(fileContent: String): List[LogMessage] =
-    fileContent.split("\n").filter(_.nonEmpty).toList.map(parseLog)
+    fileContent.linesIterator.toList.map(parseLog)
 
   /**
     * Define a function that returns only logs that are errors over the given severity level.

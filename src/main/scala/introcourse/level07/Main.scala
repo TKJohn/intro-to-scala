@@ -1,7 +1,8 @@
 package introcourse.level07
 
+import introcourse.level07.LogParser._
+
 import scala.io.Source
-import LogParser._
 
 /**
   * The `main` method does the following:
@@ -22,9 +23,9 @@ object Main {
         val fileContent: String = Source.fromFile(filepath).getLines().mkString("\n")
 
         // Implement `printErrorsOverSeverity` and then call it from here
-        ???
+        printErrorsOverSeverity(logFile = fileContent, severity = 1)
 
-      case _ => println("""sbt "runMain fundamentals.level04.Main src/main/resources/logfile.csv"""")
+      case _ => println("""sbt "runMain introcourse.level07.Main src/main/resources/logfile.csv"""")
     }
 
   }
@@ -39,6 +40,7 @@ object Main {
     * Hint: Use println to write to stdout
     */
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  private def printErrorsOverSeverity(logFile: String, severity: Int): Unit = ???
+  private def printErrorsOverSeverity(logFile: String, severity: Int): Unit =
+    showErrorsOverSeverity(logFile, severity).foreach(println)
 
 }

@@ -8,7 +8,10 @@ import introcourse.level05.ExceptionExercises.personStringPairs
 // Option <- null
 // Either <- Exception
 
-// Either[SQLError, Option[User]] => Left(SQLError); Right(None); Right(Some(user))
+// Either[SQLError, Option[User]] =>
+// 1. Right(None) // Successful SQL query, but User does not exist
+// 2. Right(user) // Successful SQL query. and User exists
+// 3. Left(SQLError) // SQL query failed
 
 /**
   * These exercises show the alternative to throwing Exceptions using the `Either` data type.

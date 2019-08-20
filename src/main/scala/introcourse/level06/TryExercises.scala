@@ -1,6 +1,6 @@
 package introcourse.level06
 
-import scala.util.{Try, Success, Failure}
+import scala.util.Try
 
 /**
   * These exercises use the `Try` ADT for working with code that throw exceptions (e.g. Java AWS library).
@@ -45,7 +45,7 @@ object TryExercises {
     *
     * Hint: Use `Try` and `parseInt`
     */
-  def parseIntSafe(str: String): Try[Int] = ???
+  def parseIntSafe(str: String): Try[Int] = Try(str.toInt)
 
   /**
     * scala> parseBooleanSafe("true")
@@ -56,7 +56,7 @@ object TryExercises {
     *
     * Hint: Use .toBoolean to convert a String to a Boolean
     **/
-  def parseBooleanSafe(str: String): Try[Boolean] = ???
+  def parseBooleanSafe(str: String): Try[Boolean] = Try(str.toBoolean)
 
 
   /**
@@ -69,7 +69,7 @@ object TryExercises {
     * Hint: Solve it without using pattern matching
     */
 
-  def increment(str: String): Try[Int] = ???
+  def increment(str: String): Try[Int] = parseIntSafe(str).map(_ + 1)
 
   /**
     * Remember that `Try[A]` ~ `Either[Throwable, A]`
@@ -81,10 +81,12 @@ object TryExercises {
   case class TryError(msg: String)
 
   def tryToEither[A](tryA: Try[A]): Either[TryError, A] =
-    tryA match {
-      case Success(a) => ???
-      case Failure(throwable) => ???
-    }
+    tryA.toEither.left.map(throwable => TryError(throwable.getMessage))
+
+  //  tryA match {
+  //    case Success(a) => Right(a)
+  //    case Failure(throwable) => Left(TryError(throwable.getMessage))
+  //  }
 
   /**
     * Write a function that converts a `Try[A]` to `Option[A]`.
@@ -94,11 +96,12 @@ object TryExercises {
     * scala> tryToOption(parseIntSafe("abc"))
     * = None
     */
-  def tryToOption[A](tryA: Try[A]): Option[A] =
-    tryA match {
-      case Success(a) => ???
-      case Failure(throwable) => ???
-    }
+  def tryToOption[A](tryA: Try[A]): Option[A] = tryA.toOption
+
+  //  tryA match {
+  //    case Success(a) => Some(a)
+  //    case Failure(_) => None
+  //  }
 
   /**
     * Create an Employee data type with three parameters:
@@ -107,7 +110,7 @@ object TryExercises {
     * 3. hasDirectReports: Boolean
     */
 
-  trait Employee
+  case class Employee(name: String, age: Int, hasDirectReports: Boolean)
 
   /**
     * Now remove `import TryTestTypes._` from `TryExercisesTest.scala`
@@ -132,19 +135,27 @@ object TryExercises {
     */
   def mkEmployee(csv: String): Either[TryError, Employee] =
     csv.split(",") match {
-      case Array(nameStr, ageStr, hasDirectReportsStr) => ???
-      case _ => ???
+      case Array(nameStr, ageStr, hasDirectReportsStr) => {
+        val failureOrEmployee: Try[Employee] = for {
+          age <- parseIntSafe(ageStr)
+          hasDirectReport <- parseBooleanSafe(hasDirectReportsStr)
+        } yield Employee(nameStr, age, hasDirectReport)
+
+        tryToEither(failureOrEmployee)
+      }
+      case _ => Left(TryError("CSV has wrong number of fields. Expected 3."))
     }
 
   /**
     * @param filename Path to file containing employees data, e.g. "src/main/resources/employees.csv"
     * @return List of Employees and/or errors if any
     *
-    * Hint: Use `mkEmployee`
+    *         Hint: Use `mkEmployee`
     */
   def fileToEmployees(filename: String): List[Either[TryError, Employee]] = {
-    val lines: List[String] = io.Source.fromFile(filename).getLines().toList
-    ???
+    val file = io.Source.fromFile(filename)
+    val lines: List[String] = file.getLines().toList
+    file.close()
+    lines.map(mkEmployee)
   }
-
 }
